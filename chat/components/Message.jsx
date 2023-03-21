@@ -21,14 +21,14 @@ const Message = ({ message }) => {
     let m = date.getMinutes();
     let time = h + ":" + m;
 
-    const newDate = date.toLocaleDateString('es', options);
+    const newDate = date.toLocaleDateString('es');
     return (
         <article className={newStyles}>
             <div>
                 <div className='text-message'>
                     <p className="text">{message.text}</p>
                 </div>
-                <p className="user">{`${newDate} - ${time}`}</p>
+                <p className="user">{`${message.name} - ${newDate} - ${time}`}</p>
             </div>
             {/* <img src={message.photo} alt="user photo" /> */}
         </article>

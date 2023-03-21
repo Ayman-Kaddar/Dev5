@@ -1,5 +1,5 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from '../firebase';
 import Picker from 'emoji-picker-react';
 
@@ -9,20 +9,15 @@ const SendMessage = ({ scroll }) => {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        // if(input === ''){
-        //     alert('Por favor ingrese un mensaje válido');
-        //     return;
-        // }
         const { uid, displayName, } = auth.currentUser;
         await addDoc(collection(db, 'messages'), {
             text: input,
             name: displayName,
             uid,
-            // photo: photoURL,
             timestamp: serverTimestamp()
         })
         setInput('');
-        scroll.current.scrollIntoView({ behavior: 'smooth' })
+        scroll.current.scrollIntoView({ behavior: 'smooth' });
     }
 
     const emoji = () => {
@@ -34,6 +29,10 @@ const SendMessage = ({ scroll }) => {
     const onEmojiClick = (event, emojiObject) => {
         setInput(`${input}${emojiObject.emoji}`)
     };
+
+    useEffect(() => {
+        scroll.current.scrollIntoView({ behavior: 'smooth' });
+    }, [scroll]);
 
     return (
         <form onSubmit={sendMessage}>
@@ -59,6 +58,7 @@ const SendMessage = ({ scroll }) => {
                 onChange={e => setInput(e.target.value)}
             />
             <button type="submit">Enviar <i className="fa-solid fa-paper-plane"></i></button>
+            <div ref={scroll}></div>
         </form>
     );
 }
